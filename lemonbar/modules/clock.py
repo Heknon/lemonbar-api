@@ -2,13 +2,13 @@ import datetime
 from time import strftime
 from typing import Optional
 
-from lemonbar import formatters
+from lemonbar import CommandHandler, Button
 from lemonbar.module import Module
 
 _EVENT_NAME = "toggle_clock"
 
 
-class Clock(Module):
+class Clock(Module, CommandHandler):
     _CONFIG = Module.Config(
         minimum_render_interval=datetime.timedelta(milliseconds=700),
         force_render_on_event=True,
@@ -23,6 +23,7 @@ class Clock(Module):
         """
         super().__init__()
         self._toggled_at: Optional[datetime.datetime] = None
+        self.register_command(_EVENT_NAME, Button.LEFT, lambda button: Clock.toggle(self, button))
 
     async def render(self):
         # If the clock has been toggled for more than a certain period of time
@@ -30,14 +31,12 @@ class Clock(Module):
             self._toggled_at = None  # Automatically toggle back to the clock
 
         if self._toggled_at:
-            return formatters.button(
-                formatters.Button.LEFT,
+            return self.as_command(
                 _EVENT_NAME,
                 strftime('%d/%m/%Y')
             )
         else:
-            return formatters.button(
-                formatters.Button.LEFT,
+            return self.as_command(
                 _EVENT_NAME,
                 strftime('%H:%M:%S')
             )
@@ -45,14 +44,11 @@ class Clock(Module):
     async def should_render(self) -> bool:
         return True
 
-    async def handle_event(self, event):
+    def toggle(self, button: Button):
         if not self._toggled_at:
             self._toggled_at = datetime.datetime.now()
         else:
             self._toggled_at = None
-
-    async def should_handle_event(self, event: str) -> bool:
-        return event.strip() == _EVENT_NAME
 
     @property
     def config(self) -> Module.Config:

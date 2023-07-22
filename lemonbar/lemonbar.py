@@ -10,7 +10,7 @@ from .models.bar_geometry import BarGeometry
 from .models.bar_placement import BarPlacement
 from .models.lemonbar_arguments import LemonbarArguments
 from .models.monitor import MonitorId
-from .module import Module
+from .module import Module, EventHandler
 
 _DEFAULT_LOGGER = logging.getLogger("lemonbar")
 
@@ -84,7 +84,7 @@ class Lemonbar:
         if event_pipe in exceptions:
             raise RuntimeError("An error occurred waiting for Lemonbar to write!")
 
-        event = event_pipe.readline().rstrip() if event_pipe in readables else None
+        event = event_pipe.readline().strip() if event_pipe in readables else None
 
         render_cycles = [state_kept_await(module, self._handle_module_cycle(module, event)) for module in self._modules]
         for cycle_data in asyncio.as_completed(render_cycles):
@@ -115,7 +115,7 @@ class Lemonbar:
 
     async def _handle_module_cycle(self, module: Module, event: Optional[str]) -> str:
         should_handle_event = False
-        if event and await module.should_handle_event(event):
+        if event and isinstance(module, EventHandler) and await module.should_handle_event(event):
             await module.handle_event(event)
             should_handle_event = True
 

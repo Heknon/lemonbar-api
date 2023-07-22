@@ -17,22 +17,6 @@ class Module(abc.ABC):
         :return: True if the `render` method should be called next render cycle
         """
 
-    @abc.abstractmethod
-    async def handle_event(self, event: str):
-        """
-        Called when <event> is received through stdout communication with Lemonbar
-        if `should_handle_event` returns True.
-        """
-
-    @abc.abstractmethod
-    async def should_handle_event(self, event: str) -> bool:
-        """
-        Called when <event> is received through stdout communication with Lemonbar
-
-        :param event: The stdout *line* from Lemonbar
-        :return: True if the `handle_event` should be called.
-        """
-
     @property
     def config(self) -> 'Module.Config':
         """
@@ -54,3 +38,21 @@ class Module(abc.ABC):
         minimum_render_interval: datetime.timedelta = datetime.timedelta(seconds=1)
         force_render_on_event: bool = True
         cache_exceptions: bool = True
+
+
+class EventHandler(abc.ABC):
+    @abc.abstractmethod
+    async def handle_event(self, event: str):
+        """
+        Called when <event> is received through stdout communication with Lemonbar
+        if `should_handle_event` returns True.
+        """
+
+    @abc.abstractmethod
+    async def should_handle_event(self, event: str) -> bool:
+        """
+        Called when <event> is received through stdout communication with Lemonbar
+
+        :param event: The stdout *line* from Lemonbar
+        :return: True if the `handle_event` should be called.
+        """
