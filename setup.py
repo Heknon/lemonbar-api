@@ -1,19 +1,22 @@
 from distutils.core import setup
+from pathlib import Path
 
 setup(
     name='lemonbar',
-    packages=['lemonbar'],
-    version='0.6.0',
+    version='0.6.5',
     license='MIT',
     description='A Python API for interacting with Lemonbar',
+    long_description=Path("README.md").read_text(),
+    long_description_content_type="text/markdown",
     author='Ori Harel',
     author_email='oeharel@gmail.com',
     url='https://github.com/Heknon/lemonbar-api',
-    download_url='https://github.com/Heknon/lemonbar-api/archive/refs/tags/v0.6.0.tar.gz',
+    download_url='https://github.com/Heknon/lemonbar-api/archive/refs/tags/v0.6.5.tar.gz',
     keywords=['lemonbar', 'api', 'lemonbar-api', "arch", "linux"],
     install_requires=[
         'pydantic',
         'screeninfo',
+        'pydantic_extra_types',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
