@@ -8,14 +8,16 @@ def swap_background_and_foreground(message: str) -> str:
     return message
 
 
-@make_formatter('l')
 def align_left(message: str) -> str:
-    return message
+    return "%{l}" + message + "%{l}"
 
 
-@make_formatter('r')
+def align_center(message: str) -> str:
+    return "%{c}" + message + "%{l}"
+
+
 def align_right(message: str) -> str:
-    return message
+    return "%{r}" + message + "%{l}"
 
 
 def offset_x(pixels: int, message: str) -> str:
