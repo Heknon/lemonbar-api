@@ -16,6 +16,7 @@ def validate_monitor_id(
         if value not in monitor_names:
             raise ValueError(f"Invalid monitor ID", monitor_names)
 
+        return value
     except ValidationError:
         raise PydanticCustomError(
             'invalid_monitor_id',
