@@ -3,7 +3,7 @@ from pathlib import Path
 
 setup(
     name='lemonbar',
-    version='0.6.6',
+    version='0.7.0',
     license='MIT',
     description='A Python API for interacting with Lemonbar',
     long_description=Path("README.md").read_text(),
@@ -11,7 +11,7 @@ setup(
     author='Ori Harel',
     author_email='oeharel@gmail.com',
     url='https://github.com/Heknon/lemonbar-api',
-    download_url='https://github.com/Heknon/lemonbar-api/archive/refs/tags/v0.6.6.tar.gz',
+    download_url='https://github.com/Heknon/lemonbar-api/archive/refs/tags/v0.7.0.tar.gz',
     keywords=['lemonbar', 'api', 'lemonbar-api', "arch", "linux"],
     install_requires=[
         'pydantic',
