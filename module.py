@@ -34,11 +34,11 @@ class Module(abc.ABC):
         """
 
     @property
-    @abc.abstractmethod
     def config(self) -> 'Module.Config':
         """
         :return: Module configuration
         """
+        return Module.Config()
 
     @dataclasses.dataclass
     class Config:
@@ -51,6 +51,6 @@ class Module(abc.ABC):
         :param cache_exceptions: If true, if an exception is thrown during render
             it is cached and render is only called again if <minimum_render_interval> has passed
         """
-        minimum_render_interval: datetime.timedelta
+        minimum_render_interval: datetime.timedelta = datetime.timedelta(seconds=1)
         force_render_on_event: bool = True
         cache_exceptions: bool = True

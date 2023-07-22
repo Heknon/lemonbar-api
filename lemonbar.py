@@ -3,7 +3,7 @@ import datetime
 import logging
 import select
 from subprocess import PIPE, Popen
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, AnyStr
 
 from async_utils import state_kept_await
 from models.bar_geometry import BarGeometry
@@ -55,20 +55,23 @@ class Lemonbar:
         self._render_cache: Dict[Module, str] = {}
 
     async def attach(self):
-        self._logger.info("Attaching to Lemonbar process stdout")
-        while True:
-            start_time = datetime.datetime.now()
-            self._logger.debug("Starting module render cycle", extra={
-                'start_time': start_time
-            })
-            await self._module_cycle()
-            end_time = datetime.datetime.now()
-            interval = end_time - start_time
-            self._logger.debug(f"Finished module render cycle in {interval}", extra={
-                'start_time': start_time,
-                'end_time': end_time,
-                'interval': interval
-            })
+        try:
+            self._logger.info("Attaching to Lemonbar process stdout")
+            while True:
+                start_time = datetime.datetime.now()
+                self._logger.debug("Starting module render cycle", extra={
+                    'start_time': start_time
+                })
+                await self._module_cycle()
+                end_time = datetime.datetime.now()
+                interval = end_time - start_time
+                self._logger.debug(f"Finished module render cycle in {interval}", extra={
+                    'start_time': start_time,
+                    'end_time': end_time,
+                    'interval': interval
+                })
+        finally:
+            self.close()
 
     async def _module_cycle(self):
         event_pipe = self._lemonbar_process.stdout
@@ -84,10 +87,16 @@ class Lemonbar:
         event = event_pipe.readline().rstrip() if event_pipe in readables else None
 
         render_cycles = [state_kept_await(module, self._handle_module_cycle(module, event)) for module in self._modules]
-        for module, render_value in asyncio.as_completed(render_cycles):
-            had_exception = False
+        for cycle_data in asyncio.as_completed(render_cycles):
+            module, render_value = await cycle_data
+            had_exception = isinstance(render_value, Exception)
             try:
-                render_value = await render_value
+                if had_exception:
+                    raise render_value
+
+                if not isinstance(render_value, (str, bytes)):
+                    raise TypeError("Render method must return a string or bytes!")
+
                 self._lemonbar_process.stdin.write(render_value)
             except Exception as e:
                 self._logger.exception("Failed to render module!", extra={
@@ -139,6 +148,7 @@ class Lemonbar:
         )
 
     def close(self):
+        self._logger.info("Closing connection to Lemonbar gracefully.")
         self._lemonbar_process.kill()
 
     @property

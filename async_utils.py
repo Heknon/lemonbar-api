@@ -28,4 +28,7 @@ async def gather_if(gathers: Iterable[Tuple[Coroutine, Coroutine]]) -> List[T]:
 
 
 async def state_kept_await(state: T, coroutine: Awaitable[V]) -> Tuple[T, V]:
-    return state, await coroutine
+    try:
+        return state, await coroutine
+    except Exception as e:
+        return state, e
