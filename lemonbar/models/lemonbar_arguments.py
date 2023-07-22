@@ -4,9 +4,9 @@ from typing import List, Iterable, Optional, Tuple
 from pydantic import BaseModel
 from pydantic_extra_types.color import Color
 
-from models.bar_geometry import BarGeometry
-from models.bar_placement import BarPlacement
-from models.monitor import MonitorId
+from .bar_geometry import BarGeometry
+from .bar_placement import BarPlacement
+from .monitor import MonitorId
 
 
 class ParameterMapping(str, Enum):

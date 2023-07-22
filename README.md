@@ -22,8 +22,8 @@ abstracts them for you.
 
 ```python
 from lemonbar import Lemonbar
-from models.bar_geometry import BarGeometry
-from models.bar_placement import BarPlacement
+from lemonbar.models import BarGeometry
+from lemonbar.models.bar_placement import BarPlacement
 
 
 async def main():
@@ -69,43 +69,36 @@ Allows you to define the size and offsets of the bar on the screen.
 Allows you to define the monitors which you'd like the Lemonbar to be
 displayed on. If nothing is passed, it will display on all screens.
 
-
 `placement: BarPlacement = BarPlacement.TOP`
 
 Allows you to define whether you want the bar to be placed on the top
 of your screen or on the bottom.
 
-
 `force_dock: bool = False`
 
-Force docking without asking the window manager. 
+Force docking without asking the window manager.
 This is needed if the window manager isn't EWMH compliant.
-
 
 `fonts: Optional[List[str]] = None`
 
 Define the font to load into one of the five slots
 See: [Lemonbar Options](https://github.com/drscream/lemonbar-xft#options)
 
-
 `permanent: bool = False`
 
 Make the bar permanent, don't exit after the standard input is closed.
-
 
 `title: Optional[str] = ""`
 
 Defines the WM_NAME of the bar. Meaning the title of the window.
 
-
 `underline_width: int = 1`
 
 Sets the underline width in pixels. The default is 1.
 
-
 `background_color: Optional[str] = None`
 
-Set the background color of the bar. 
+Set the background color of the bar.
 
 Since Pydantic is used, any of the following is valid:
 [Pydantic Color Extension](https://docs.pydantic.dev/latest/usage/types/extra_types/color_types/)
@@ -116,23 +109,18 @@ Since Pydantic is used, any of the following is valid:
 4. RGB/RGBA strings (e.g. "rgb(255, 255, 255)", "rgba(255, 255, 255, 0.5)")
 5. HSL strings (e.g. "hsl(270, 60%, 70%)", "hsl(270, 60%, 70%, .5)")
 
-
-
 `foreground_color: Optional[str] = None`
 
 Same as background color but for the foreground.
-
 
 `underline_color: Optional[str] = None`
 
 Same as background color but for underlines.
 
-
 `logger: logging.Logger = _DEFAULT_LOGGER`
 
 The logger the Lemonbar class should use when logging information about
 the execution of modules.
-
 
 ## Modules
 
@@ -155,12 +143,12 @@ is made up of the following fields:
 The minimum amount of time to wait before calling `render()` on the
 module again.
 
-This is a guarantee that after **at least** `timedelta`, in the 
+This is a guarantee that after **at least** `timedelta`, in the
 next render cycle, the `render` method is called.
 
 `force_render_on_event: bool = True`
 
-Allows you to override `minimum_render_interval` 
+Allows you to override `minimum_render_interval`
 if the module processed an event. Meaning, if `minimum_render_interval` has not
 passed but the module processed an event, `render` will be called.
 
@@ -170,8 +158,8 @@ If true and an exception is raised in the module,
 do not try immediately on the next render cycle to re-render but
 wait `minimum_render_interval`.
 
-
 ## Formatters
+
 This library also provides formatters for those defined
 [here](https://github.com/drscream/lemonbar-xft#formatting) under
 the `formatters` package.

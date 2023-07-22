@@ -1,8 +1,6 @@
-from typing import Optional
-
 from pydantic_extra_types.color import Color
 
-from formatters._formatter import make_formatter, lemon_formatting
+from lemonbar.formatters._formatter import make_formatter, lemon_formatting
 
 
 @make_formatter('R')

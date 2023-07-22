@@ -39,4 +39,3 @@ class BarGeometry(BaseModel):
             geometry += f'{sign}{self.y_offset}'
 
         return geometry
-

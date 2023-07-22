@@ -1,4 +1,4 @@
-from typing import TypeAlias, Annotated, Any
+from typing import Annotated, Any
 
 import screeninfo
 from pydantic import WrapValidator, ValidationError
@@ -10,7 +10,6 @@ def validate_monitor_id(
         value: Any, handler: ValidatorFunctionWrapHandler, _info: ValidationInfo
 ) -> Any:
     monitor_names = {monitor.name for monitor in screeninfo.get_monitors()}
-    print(monitor_names)
     try:
         value = handler(value)
 

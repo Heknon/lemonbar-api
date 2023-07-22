@@ -3,14 +3,14 @@ import datetime
 import logging
 import select
 from subprocess import PIPE, Popen
-from typing import List, Optional, Dict, AnyStr
+from typing import List, Optional, Dict
 
-from async_utils import state_kept_await
-from models.bar_geometry import BarGeometry
-from models.bar_placement import BarPlacement
-from models.lemonbar_arguments import LemonbarArguments
-from models.monitor import MonitorId
-from module import Module
+from .async_utils import state_kept_await
+from .models.bar_geometry import BarGeometry
+from .models.bar_placement import BarPlacement
+from .models.lemonbar_arguments import LemonbarArguments
+from .models.monitor import MonitorId
+from .module import Module
 
 _DEFAULT_LOGGER = logging.getLogger("lemonbar")
 
@@ -139,7 +139,6 @@ class Lemonbar:
         return min([module.config.minimum_render_interval for module in self._modules])
 
     def open(self):
-        print(self._command)
         self._unsafe_lemonbar_process = Popen(
             self._command,
             stdin=PIPE,

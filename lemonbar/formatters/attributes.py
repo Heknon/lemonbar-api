@@ -1,6 +1,6 @@
 from enum import Enum
 
-from formatters._formatter import lemon_formatting
+from lemonbar.formatters._formatter import lemon_formatting
 
 
 class Modifier(str, Enum):

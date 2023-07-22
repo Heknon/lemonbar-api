@@ -2,8 +2,8 @@ import datetime
 from time import strftime
 from typing import Optional
 
-import formatters.button
-from module import Module
+from lemonbar import formatters
+from lemonbar.module import Module
 
 _EVENT_NAME = "toggle_clock"
 
@@ -46,14 +46,12 @@ class Clock(Module):
         return True
 
     async def handle_event(self, event):
-        print(f'handling {datetime.datetime.now()}')
         if not self._toggled_at:
             self._toggled_at = datetime.datetime.now()
         else:
             self._toggled_at = None
 
     async def should_handle_event(self, event: str) -> bool:
-        print(f'should handle {datetime.datetime.now()}')
         return event.strip() == _EVENT_NAME
 
     @property

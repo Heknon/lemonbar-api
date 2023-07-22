@@ -1,6 +1,6 @@
 import screeninfo
 
-from formatters._formatter import lemon_formatting, make_formatter
+from lemonbar.formatters._formatter import lemon_formatting, make_formatter
 
 _TAG = 'S'
 
