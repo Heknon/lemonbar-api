@@ -89,9 +89,8 @@ class Lemonbar:
         render_cycles = [state_kept_await(module, self._handle_module_cycle(module, event)) for module in self._modules]
         for cycle_data in asyncio.as_completed(render_cycles):
             module, render_value = await cycle_data
-            had_exception = isinstance(render_value, Exception)
             try:
-                if had_exception:
+                if isinstance(render_value, Exception):
                     raise render_value
 
                 if not isinstance(render_value, (str, bytes)):
@@ -104,11 +103,10 @@ class Lemonbar:
                 })
                 render_value = f"ERROR: {e}"
                 self._lemonbar_process.stdin.write(render_value)
-                had_exception = True
-            finally:
-                if not had_exception or module.config.cache_exceptions:
-                    self._render_cache[module] = render_value
+                if module.config.cache_exceptions:
                     self._module_last_render[module] = datetime.datetime.now()
+            finally:
+                self._render_cache[module] = render_value
 
         self._lemonbar_process.stdin.write('\n')
         self._lemonbar_process.stdin.flush()
@@ -131,6 +129,7 @@ class Lemonbar:
         render_value = self._render_cache.get(module)
         if should_render:
             render_value = await module.render()
+            self._module_last_render[module] = datetime.datetime.now()
 
         return render_value
 
